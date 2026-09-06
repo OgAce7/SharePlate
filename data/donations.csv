@@ -1,0 +1,6 @@
+donation_id,food_type,quantity,unit,latitude,longitude,vegetarian,vegan,perishability,hours_until_expiry,pickup_required
+D001,cooked_meal,150,meals,26.9100,75.7850,1,0,high,24,1
+D002,packaged_food,100,meals,26.9300,75.8000,1,1,low,72,1
+D003,cooked_meal,120,meals,26.9150,75.8100,1,0,high,2,1
+D004,fruits,80,kg,26.9000,75.7800,1,1,medium,24,1
+D005,vegetables,150,kg,26.9400,75.7900,1,1,medium,30,1
