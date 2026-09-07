@@ -24,9 +24,9 @@ brew install libomp
 ## Running
 
 ```bash
-python generate_data.py    # creates data/*.csv (synthetic demand + donation history)
-python train_model.py      # trains + saves the demand model to models/
-uvicorn main:app --reload  # starts the API on http://127.0.0.1:8000
+python generate_data.py        # creates data/*.csv (synthetic demand + donation history)
+python train_model.py          # trains + saves the demand model to models/
+uvicorn demand_api:app --reload  # starts the API on http://127.0.0.1:8000
 ```
 
 Interactive docs: `http://127.0.0.1:8000/docs`
@@ -121,8 +121,8 @@ Health check.
   that donation most.
 - Currently running on synthetic data (`generate_data.py`). Once real
   donation/demand data is available in the shared PostgreSQL database
-  (Module 4), swap the CSV reads in `main.py` for DB queries — the endpoint
-  contracts (request/response shape) won't need to change.
+  (Module 4), swap the CSV reads in `demand_api.py` for DB queries — the
+  endpoint contracts (request/response shape) won't need to change.
 - Base URL for local dev: `http://127.0.0.1:8000`. Update this once deployed.
 
 ## Files
@@ -132,4 +132,4 @@ Health check.
 | `generate_data.py` | Generates synthetic donation + demand history |
 | `train_model.py` | Feature engineering + model training (RandomForest / XGBoost) |
 | `food_intelligence.py` | Shelf life, meals estimate, waste risk logic |
-| `main.py` | FastAPI app exposing both endpoints |
+| `demand_api.py` | FastAPI app exposing both endpoints |

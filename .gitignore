@@ -3,4 +3,5 @@ __pycache__/
 *.pyc
 data/
 models/
-.DS_Store.history/
+.DS_Store
+.history/
