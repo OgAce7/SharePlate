@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SharePlate - Donor Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        🍽️ SharePlate
+    </div>
+
+    <nav>
+        <a href="/" class="active">Donor Dashboard</a>
+        <a href="/ngo">NGO Dashboard</a>
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <!-- Hero -->
+
+    <section class="hero">
+
+        <div>
+            <h1>Food Donor Dashboard</h1>
+
+            <p>
+                Share surplus food and help reduce food waste.
+            </p>
+        </div>
+
+        <div class="status">
+            ● Donor Online
+        </div>
+
+    </section>
+
+
+    <!-- Statistics -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <span>Total Donations</span>
+
+            <h2>24</h2>
+
+            <p>Donations made</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>Food Shared</span>
+
+            <h2>1,850</h2>
+
+            <p>Meals donated</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>People Helped</span>
+
+            <h2>1,420</h2>
+
+            <p>Beneficiaries</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>Waste Prevented</span>
+
+            <h2>620 kg</h2>
+
+            <p>Food rescued</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Donation Form -->
+
+    <section class="dashboard-card">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>Donate Surplus Food</h2>
+
+                <p>
+                    Enter the details of the food you want to donate.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form id="donationForm">
+
+            <div class="form-grid">
+
+
+                <!-- Food Type -->
+
+                <div class="form-group">
+
+                    <label for="food_type">
+                        Food Type
+                    </label>
+
+                    <select
+                        id="food_type"
+                        name="food_type"
+                        required
+                    >
+
+                        <option value="">
+                            Select food type
+                        </option>
+
+                        <option value="cooked_meal">
+                            Cooked Meals
+                        </option>
+
+                        <option value="packaged_food">
+                            Packaged Food
+                        </option>
+
+                        <option value="fruits">
+                            Fruits
+                        </option>
+
+                        <option value="vegetables">
+                            Vegetables
+                        </option>
+
+                        <option value="bakery_items">
+                            Bakery Items
+                        </option>
+
+                        <option value="dairy_products">
+                            Dairy Products
+                        </option>
+
+                        <option value="snacks">
+                            Snacks
+                        </option>
+
+                        <option value="beverages">
+                            Beverages
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Quantity -->
+
+                <div class="form-group">
+
+                    <label for="quantity">
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        placeholder="Enter quantity"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Unit -->
+
+                <div class="form-group">
+
+                    <label for="unit">
+                        Unit
+                    </label>
+
+                    <select
+                        id="unit"
+                        name="unit"
+                        required
+                    >
+
+                        <option value="meals">
+                            Meals
+                        </option>
+
+                        <option value="kg">
+                            Kilograms
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Safe Until -->
+
+                <div class="form-group">
+
+                    <label for="safe_until">
+                        Safe Until
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="safe_until"
+                        name="safe_until"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Pickup Location -->
+
+                <div class="form-group location-group">
+
+                    <label>
+                        📍 Pickup Location
+                    </label>
+
+                    <button
+                        type="button"
+                        class="location-btn"
+                        onclick="getLocation()"
+                    >
+                        📍 Use My Current Location
+                    </button>
+
+                    <div
+                        id="locationStatus"
+                        class="location-status"
+                    >
+                        Location not detected
+                    </div>
+
+
+                    <!-- Hidden coordinates -->
+
+                    <input
+                        type="hidden"
+                        id="latitude"
+                        name="latitude"
+                    >
+
+                    <input
+                        type="hidden"
+                        id="longitude"
+                        name="longitude"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Food Preferences -->
+
+            <div class="checkbox-section">
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="vegetarian"
+                        name="vegetarian"
+                    >
+
+                    Vegetarian
+
+                </label>
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="vegan"
+                        name="vegan"
+                    >
+
+                    Vegan
+
+                </label>
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="pickup_required"
+                        name="pickup_required"
+                        checked
+                    >
+
+                    Pickup Required
+
+                </label>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="primary-btn submit-btn"
+            >
+                🍱 Find NGO Matches
+            </button>
+
+
+        </form>
+
+    </section>
+
+
+    <!-- Match Result -->
+
+    <section
+        class="dashboard-card"
+        id="matchResult"
+        style="display: none;"
+    >
+
+        <h2>Best NGO Match</h2>
+
+        <div class="match-box">
+
+            <span class="badge low">
+                AI MATCH
+            </span>
+
+            <h3 id="ngoName">
+                Waiting for NGO matching...
+            </h3>
+
+            <p id="matchScore">
+                Match Score: --
+            </p>
+
+            <p id="distance">
+                Distance: --
+            </p>
+
+            <p id="reliability">
+                Reliability: --
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script src="/static/script.js"></script>
+
+</body>
+
+</html>

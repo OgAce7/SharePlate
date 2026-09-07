@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SharePlate - NGO Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        🍽️ SharePlate
+    </div>
+
+    <nav>
+        <a href="/">Donor Dashboard</a>
+        <a href="/ngo" class="active">NGO Dashboard</a>
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <!-- Hero -->
+
+    <section class="hero">
+
+        <div>
+
+            <h1>NGO Dashboard</h1>
+
+            <p>
+                Find and claim surplus food donations near you.
+            </p>
+
+        </div>
+
+        <div class="status">
+            ● NGO Online
+        </div>
+
+    </section>
+
+
+    <!-- Statistics -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <span>Available Donations</span>
+
+            <h2 id="availableCount">12</h2>
+
+            <p>Nearby</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>Food Received</span>
+
+            <h2>1,240</h2>
+
+            <p>Meals this month</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>People Served</span>
+
+            <h2>980</h2>
+
+            <p>Beneficiaries</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>Food Saved</span>
+
+            <h2>420 kg</h2>
+
+            <p>From waste</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Available Donations -->
+
+    <section class="dashboard-card">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>Available Food Donations</h2>
+
+                <p>
+                    Donations matched according to your requirements.
+                </p>
+
+            </div>
+
+            <button
+                class="primary-btn"
+                onclick="refreshDonations()"
+            >
+                🔄 Refresh
+            </button>
+
+        </div>
+
+
+        <div
+            class="donation-list"
+            id="donationList"
+        >
+
+
+            <!-- Donation 1 -->
+
+            <div
+                class="donation-card urgent"
+                data-donation-id="D003"
+            >
+
+                <div class="donation-info">
+
+                    <span class="badge critical">
+                        CRITICAL
+                    </span>
+
+                    <h3>
+                        Cooked Meals
+                    </h3>
+
+                    <p>
+                        🍱 120 meals
+                    </p>
+
+                    <p>
+                        📍 1.2 km away
+                    </p>
+
+                    <p>
+                        ⏰ Expires in 2 hours
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <button
+                        class="claim-btn"
+                        onclick="claimDonation('D003', this)"
+                    >
+                        Claim Donation
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Donation 2 -->
+
+            <div
+                class="donation-card"
+                data-donation-id="D001"
+            >
+
+                <div class="donation-info">
+
+                    <span class="badge medium">
+                        MEDIUM
+                    </span>
+
+                    <h3>
+                        Cooked Meals
+                    </h3>
+
+                    <p>
+                        🍱 150 meals
+                    </p>
+
+                    <p>
+                        📍 0.8 km away
+                    </p>
+
+                    <p>
+                        ⏰ Expires in 24 hours
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <button
+                        class="claim-btn"
+                        onclick="claimDonation('D001', this)"
+                    >
+                        Claim Donation
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Donation 3 -->
+
+            <div
+                class="donation-card"
+                data-donation-id="D002"
+            >
+
+                <div class="donation-info">
+
+                    <span class="badge low">
+                        LOW
+                    </span>
+
+                    <h3>
+                        Packaged Food
+                    </h3>
+
+                    <p>
+                        📦 100 meals
+                    </p>
+
+                    <p>
+                        📍 2.4 km away
+                    </p>
+
+                    <p>
+                        ⏰ Expires in 72 hours
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <button
+                        class="claim-btn"
+                        onclick="claimDonation('D002', this)"
+                    >
+                        Claim Donation
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- Recent Activity -->
+
+    <section class="dashboard-card">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>Recent Activity</h2>
+
+                <p>
+                    Your latest donation activity.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="activity"
+            id="activityList"
+        >
+
+            <div>
+
+                <strong>D001</strong>
+
+                <span>
+                    Donation successfully claimed
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>D004</strong>
+
+                <span>
+                    Pickup completed
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>D005</strong>
+
+                <span>
+                    Donation received
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script src="/static/script.js"></script>
+
+</body>
+
+</html>
