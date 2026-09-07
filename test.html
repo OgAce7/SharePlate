@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tracking Test</title>
+</head>
+
+<body>
+
+    <h2>Donation Tracking</h2>
+
+    <p>
+        Donation:
+        <strong>D0003</strong>
+    </p>
+
+    <p>
+        Current Status:
+        <strong id="status">Loading...</strong>
+    </p>
+
+    <button id="updateButton">
+        Move to Next Status
+    </button>
+
+    <p id="result"></p>
+
+    <h3>Real-Time Updates</h3>
+
+    <div id="updates">
+        No updates yet.
+    </div>
+
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+
+        const socket = io();
+
+        const statusElement =
+            document.getElementById("status");
+
+        const resultElement =
+            document.getElementById("result");
+
+        const updatesElement =
+            document.getElementById("updates");
+
+
+        // ===============================
+        // GET CURRENT STATUS
+        // ===============================
+
+        async function loadStatus() {
+
+            const response =
+                await fetch("/api/tracking/D0003");
+
+            const data =
+                await response.json();
+
+            statusElement.innerText =
+                data.tracking_status;
+        }
+
+        loadStatus();
+
+
+        // ===============================
+        // UPDATE STATUS
+        // ===============================
+
+        document
+            .getElementById("updateButton")
+            .addEventListener("click", async function () {
+
+                const currentStatus =
+                    statusElement.innerText;
+
+                const statuses = [
+                    "PENDING",
+                    "ASSIGNED",
+                    "PICKED_UP",
+                    "IN_TRANSIT",
+                    "DELIVERED"
+                ];
+
+                const currentIndex =
+                    statuses.indexOf(currentStatus);
+
+                const nextStatus =
+                    statuses[currentIndex + 1];
+
+                if (!nextStatus) {
+
+                    resultElement.innerText =
+                        "Donation is already DELIVERED.";
+
+                    return;
+                }
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/tracking/D0003",
+                            {
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    status: nextStatus
+                                })
+                            }
+                        );
+
+                    const data =
+                        await response.json();
+
+                    resultElement.innerText =
+                        JSON.stringify(data);
+
+                } catch (error) {
+
+                    resultElement.innerText =
+                        "ERROR: " + error.message;
+                }
+
+            });
+
+
+        // ===============================
+        // REAL-TIME UPDATE
+        // ===============================
+
+        socket.on(
+            "tracking_updated",
+            function (data) {
+
+                statusElement.innerText =
+                    data.new_status;
+
+                updatesElement.innerText =
+                    "Donation " +
+                    data.donation_id +
+                    " changed from " +
+                    data.old_status +
+                    " → " +
+                    data.new_status;
+            }
+        );
+
+
+        // ===============================
+        // SOCKET CONNECTION
+        // ===============================
+
+        socket.on("connect", function () {
+
+            console.log(
+                "Connected to Socket.IO:",
+                socket.id
+            );
+        });
+
+    </script>
+
+</body>
+
+</html>
