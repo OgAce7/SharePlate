@@ -2,15 +2,23 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>SharePlate - NGO Dashboard</title>
 
     <link rel="stylesheet" href="/static/style.css">
+
 </head>
 
+
 <body>
+
 
 <header class="navbar">
 
@@ -19,8 +27,15 @@
     </div>
 
     <nav>
-        <a href="/">Donor Dashboard</a>
-        <a href="/ngo" class="active">NGO Dashboard</a>
+
+        <a href="/">
+            Donor Dashboard
+        </a>
+
+        <a href="/ngo" class="active">
+            NGO Dashboard
+        </a>
+
     </nav>
 
 </header>
@@ -28,13 +43,16 @@
 
 <main class="container">
 
-    <!-- Hero -->
+
+    <!-- HERO -->
 
     <section class="hero">
 
         <div>
 
-            <h1>NGO Dashboard</h1>
+            <h1>
+                NGO Dashboard
+            </h1>
 
             <p>
                 Find and claim surplus food donations near you.
@@ -49,57 +67,81 @@
     </section>
 
 
-    <!-- Statistics -->
+    <!-- STATISTICS -->
 
     <section class="stats-grid">
 
         <div class="stat-card">
 
-            <span>Available Donations</span>
+            <span>
+                Available Donations
+            </span>
 
-            <h2 id="availableCount">12</h2>
+            <h2 id="availableCount">
+                3
+            </h2>
 
-            <p>Nearby</p>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <span>Food Received</span>
-
-            <h2>1,240</h2>
-
-            <p>Meals this month</p>
+            <p>
+                Nearby
+            </p>
 
         </div>
 
 
         <div class="stat-card">
 
-            <span>People Served</span>
+            <span>
+                Food Received
+            </span>
 
-            <h2>980</h2>
+            <h2>
+                1,240
+            </h2>
 
-            <p>Beneficiaries</p>
+            <p>
+                Meals this month
+            </p>
 
         </div>
 
 
         <div class="stat-card">
 
-            <span>Food Saved</span>
+            <span>
+                People Served
+            </span>
 
-            <h2>420 kg</h2>
+            <h2>
+                980
+            </h2>
 
-            <p>From waste</p>
+            <p>
+                Beneficiaries
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                Food Saved
+            </span>
+
+            <h2>
+                420 kg
+            </h2>
+
+            <p>
+                From waste
+            </p>
 
         </div>
 
     </section>
 
 
-    <!-- Available Donations -->
+    <!-- AVAILABLE DONATIONS -->
 
     <section class="dashboard-card">
 
@@ -107,7 +149,9 @@
 
             <div>
 
-                <h2>Available Food Donations</h2>
+                <h2>
+                    Available Food Donations
+                </h2>
 
                 <p>
                     Donations matched according to your requirements.
@@ -115,9 +159,11 @@
 
             </div>
 
+
             <button
                 class="primary-btn"
                 onclick="refreshDonations()"
+                id="refreshButton"
             >
                 🔄 Refresh
             </button>
@@ -131,7 +177,7 @@
         >
 
 
-            <!-- Donation 1 -->
+            <!-- DONATION 1 -->
 
             <div
                 class="donation-card urgent"
@@ -163,21 +209,17 @@
                 </div>
 
 
-                <div>
-
-                    <button
-                        class="claim-btn"
-                        onclick="claimDonation('D003', this)"
-                    >
-                        Claim Donation
-                    </button>
-
-                </div>
+                <button
+                    class="claim-btn"
+                    onclick="claimDonation('D003', this)"
+                >
+                    Claim Donation
+                </button>
 
             </div>
 
 
-            <!-- Donation 2 -->
+            <!-- DONATION 2 -->
 
             <div
                 class="donation-card"
@@ -209,21 +251,17 @@
                 </div>
 
 
-                <div>
-
-                    <button
-                        class="claim-btn"
-                        onclick="claimDonation('D001', this)"
-                    >
-                        Claim Donation
-                    </button>
-
-                </div>
+                <button
+                    class="claim-btn"
+                    onclick="claimDonation('D001', this)"
+                >
+                    Claim Donation
+                </button>
 
             </div>
 
 
-            <!-- Donation 3 -->
+            <!-- DONATION 3 -->
 
             <div
                 class="donation-card"
@@ -255,16 +293,12 @@
                 </div>
 
 
-                <div>
-
-                    <button
-                        class="claim-btn"
-                        onclick="claimDonation('D002', this)"
-                    >
-                        Claim Donation
-                    </button>
-
-                </div>
+                <button
+                    class="claim-btn"
+                    onclick="claimDonation('D002', this)"
+                >
+                    Claim Donation
+                </button>
 
             </div>
 
@@ -274,7 +308,251 @@
     </section>
 
 
-    <!-- Recent Activity -->
+    <!-- TRACKING -->
+
+    <section
+        class="dashboard-card"
+        id="ngoTrackingSection"
+        style="display:none;"
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    📦 Donation Tracking
+                </h2>
+
+                <p>
+                    Track the selected donation.
+                </p>
+
+            </div>
+
+            <span
+                class="tracking-status"
+                id="ngoTrackingStatus"
+            >
+                Accepted
+            </span>
+
+        </div>
+
+
+        <div class="tracking-info">
+
+            <strong>
+                Donation ID:
+            </strong>
+
+            <span id="trackingDonationId">
+                --
+            </span>
+
+        </div>
+
+
+        <div class="timeline">
+
+
+            <div
+                class="timeline-step active"
+                id="ngo-step-pending"
+            >
+
+                <div class="timeline-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>
+                        Donation Created
+                    </strong>
+
+                    <p>
+                        Food donation received.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step active"
+                id="ngo-step-accepted"
+            >
+
+                <div class="timeline-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>
+                        NGO Accepted
+                    </strong>
+
+                    <p>
+                        Donation has been claimed.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="ngo-step-picked"
+            >
+
+                <div class="timeline-icon">
+                    3
+                </div>
+
+                <div>
+                    <strong>
+                        Picked Up
+                    </strong>
+
+                    <p>
+                        Waiting for pickup.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="ngo-step-transit"
+            >
+
+                <div class="timeline-icon">
+                    4
+                </div>
+
+                <div>
+                    <strong>
+                        In Transit
+                    </strong>
+
+                    <p>
+                        Food will be transported.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="ngo-step-delivered"
+            >
+
+                <div class="timeline-icon">
+                    5
+                </div>
+
+                <div>
+                    <strong>
+                        Delivered
+                    </strong>
+
+                    <p>
+                        Donation reaches beneficiaries.
+                    </p>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- DEMO TRACKING BUTTONS -->
+
+        <div class="tracking-controls">
+
+            <button
+                onclick="updateNGOTracking('picked')"
+                class="secondary-btn"
+            >
+                Mark Picked Up
+            </button>
+
+            <button
+                onclick="updateNGOTracking('transit')"
+                class="secondary-btn"
+            >
+                Mark In Transit
+            </button>
+
+            <button
+                onclick="updateNGOTracking('delivered')"
+                class="primary-btn"
+            >
+                Mark Delivered
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ANALYTICS -->
+
+    <section class="dashboard-card">
+
+        <h2>
+            📊 Tracking Analytics
+        </h2>
+
+        <div class="analytics-grid">
+
+            <div class="analytics-card">
+
+                <span>
+                    Average Pickup Time
+                </span>
+
+                <strong>
+                    32 min
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <span>
+                    Successful Deliveries
+                </span>
+
+                <strong>
+                    96%
+                </strong>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <span>
+                    Food Saved
+                </span>
+
+                <strong>
+                    420 kg
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTIVITY -->
 
     <section class="dashboard-card">
 
@@ -282,7 +560,9 @@
 
             <div>
 
-                <h2>Recent Activity</h2>
+                <h2>
+                    Recent Activity
+                </h2>
 
                 <p>
                     Your latest donation activity.
@@ -300,7 +580,9 @@
 
             <div>
 
-                <strong>D001</strong>
+                <strong>
+                    D001
+                </strong>
 
                 <span>
                     Donation successfully claimed
@@ -311,7 +593,9 @@
 
             <div>
 
-                <strong>D004</strong>
+                <strong>
+                    D004
+                </strong>
 
                 <span>
                     Pickup completed
@@ -322,11 +606,91 @@
 
             <div>
 
-                <strong>D005</strong>
+                <strong>
+                    D005
+                </strong>
 
                 <span>
                     Donation received
                 </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SECURITY -->
+
+    <section class="dashboard-card">
+
+        <h2>
+            🔐 Security & Verification
+        </h2>
+
+
+        <div class="security-grid">
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Verified NGO
+                    </strong>
+
+                    <p>
+                        NGO account is verified.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Verified Donations
+                    </strong>
+
+                    <p>
+                        Donation information is validated.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Secure Tracking
+                    </strong>
+
+                    <p>
+                        Donation status is monitored throughout delivery.
+                    </p>
+
+                </div>
 
             </div>
 

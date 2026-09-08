@@ -28,7 +28,7 @@
 
 <main class="container">
 
-    <!-- Hero -->
+    <!-- HERO -->
 
     <section class="hero">
 
@@ -47,70 +47,49 @@
     </section>
 
 
-    <!-- Statistics -->
+    <!-- STATISTICS -->
 
     <section class="stats-grid">
 
         <div class="stat-card">
-
             <span>Total Donations</span>
-
-            <h2>24</h2>
-
+            <h2 id="totalDonations">24</h2>
             <p>Donations made</p>
-
         </div>
 
-
         <div class="stat-card">
-
             <span>Food Shared</span>
-
             <h2>1,850</h2>
-
             <p>Meals donated</p>
-
         </div>
 
-
         <div class="stat-card">
-
             <span>People Helped</span>
-
             <h2>1,420</h2>
-
             <p>Beneficiaries</p>
-
         </div>
 
-
         <div class="stat-card">
-
             <span>Waste Prevented</span>
-
             <h2>620 kg</h2>
-
             <p>Food rescued</p>
-
         </div>
 
     </section>
 
 
-    <!-- Donation Form -->
+    <!-- DONATION FORM -->
 
     <section class="dashboard-card">
 
         <div class="section-header">
 
             <div>
-
                 <h2>Donate Surplus Food</h2>
 
                 <p>
                     Enter the details of the food you want to donate.
                 </p>
-
             </div>
 
         </div>
@@ -120,8 +99,7 @@
 
             <div class="form-grid">
 
-
-                <!-- Food Type -->
+                <!-- FOOD TYPE -->
 
                 <div class="form-group">
 
@@ -129,50 +107,42 @@
                         Food Type
                     </label>
 
-                    <select
-                        id="food_type"
-                        name="food_type"
-                        required
-                    >
+                    <select id="food_type" required>
 
                         <option value="">
                             Select food type
                         </option>
 
-                        <option value="cooked_meal">
+                        <option value="Cooked Meals">
                             Cooked Meals
                         </option>
 
-                        <option value="packaged_food">
+                        <option value="Packaged Food">
                             Packaged Food
                         </option>
 
-                        <option value="fruits">
+                        <option value="Fruits">
                             Fruits
                         </option>
 
-                        <option value="vegetables">
+                        <option value="Vegetables">
                             Vegetables
                         </option>
 
-                        <option value="bakery_items">
+                        <option value="Bakery Items">
                             Bakery Items
                         </option>
 
-                        <option value="dairy_products">
+                        <option value="Dairy Products">
                             Dairy Products
                         </option>
 
-                        <option value="snacks">
+                        <option value="Snacks">
                             Snacks
                         </option>
 
-                        <option value="beverages">
+                        <option value="Beverages">
                             Beverages
-                        </option>
-
-                        <option value="other">
-                            Other
                         </option>
 
                     </select>
@@ -180,7 +150,7 @@
                 </div>
 
 
-                <!-- Quantity -->
+                <!-- QUANTITY -->
 
                 <div class="form-group">
 
@@ -191,7 +161,6 @@
                     <input
                         type="number"
                         id="quantity"
-                        name="quantity"
                         min="1"
                         placeholder="Enter quantity"
                         required
@@ -200,7 +169,7 @@
                 </div>
 
 
-                <!-- Unit -->
+                <!-- UNIT -->
 
                 <div class="form-group">
 
@@ -208,11 +177,7 @@
                         Unit
                     </label>
 
-                    <select
-                        id="unit"
-                        name="unit"
-                        required
-                    >
+                    <select id="unit">
 
                         <option value="meals">
                             Meals
@@ -227,7 +192,7 @@
                 </div>
 
 
-                <!-- Safe Until -->
+                <!-- SAFE UNTIL -->
 
                 <div class="form-group">
 
@@ -238,14 +203,13 @@
                     <input
                         type="datetime-local"
                         id="safe_until"
-                        name="safe_until"
                         required
                     >
 
                 </div>
 
 
-                <!-- Pickup Location -->
+                <!-- LOCATION -->
 
                 <div class="form-group location-group">
 
@@ -268,19 +232,14 @@
                         Location not detected
                     </div>
 
-
-                    <!-- Hidden coordinates -->
-
                     <input
                         type="hidden"
                         id="latitude"
-                        name="latitude"
                     >
 
                     <input
                         type="hidden"
                         id="longitude"
-                        name="longitude"
                     >
 
                 </div>
@@ -288,7 +247,7 @@
             </div>
 
 
-            <!-- Food Preferences -->
+            <!-- PREFERENCES -->
 
             <div class="checkbox-section">
 
@@ -297,7 +256,6 @@
                     <input
                         type="checkbox"
                         id="vegetarian"
-                        name="vegetarian"
                     >
 
                     Vegetarian
@@ -310,7 +268,6 @@
                     <input
                         type="checkbox"
                         id="vegan"
-                        name="vegan"
                     >
 
                     Vegan
@@ -323,7 +280,6 @@
                     <input
                         type="checkbox"
                         id="pickup_required"
-                        name="pickup_required"
                         checked
                     >
 
@@ -334,8 +290,6 @@
             </div>
 
 
-            <!-- Submit -->
-
             <button
                 type="submit"
                 class="primary-btn submit-btn"
@@ -343,18 +297,17 @@
                 🍱 Find NGO Matches
             </button>
 
-
         </form>
 
     </section>
 
 
-    <!-- Match Result -->
+    <!-- NGO MATCH -->
 
     <section
         class="dashboard-card"
         id="matchResult"
-        style="display: none;"
+        style="display:none;"
     >
 
         <h2>Best NGO Match</h2>
@@ -366,7 +319,7 @@
             </span>
 
             <h3 id="ngoName">
-                Waiting for NGO matching...
+                --
             </h3>
 
             <p id="matchScore">
@@ -386,11 +339,226 @@
     </section>
 
 
+    <!-- TRACKING -->
+
+    <section
+        class="dashboard-card"
+        id="trackingSection"
+        style="display:none;"
+    >
+
+        <div class="section-header">
+
+            <div>
+                <h2>📦 Donation Tracking</h2>
+
+                <p>
+                    Track the progress of your food donation.
+                </p>
+            </div>
+
+            <span
+                class="tracking-status"
+                id="trackingStatus"
+            >
+                Pending
+            </span>
+
+        </div>
+
+
+        <div class="timeline">
+
+            <div
+                class="timeline-step active"
+                id="step-pending"
+            >
+
+                <div class="timeline-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Donation Created</strong>
+                    <p>Donation has been registered.</p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="step-accepted"
+            >
+
+                <div class="timeline-icon">
+                    2
+                </div>
+
+                <div>
+                    <strong>NGO Accepted</strong>
+                    <p>Waiting for NGO to accept the donation.</p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="step-picked"
+            >
+
+                <div class="timeline-icon">
+                    3
+                </div>
+
+                <div>
+                    <strong>Picked Up</strong>
+                    <p>Food has been collected.</p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="step-transit"
+            >
+
+                <div class="timeline-icon">
+                    4
+                </div>
+
+                <div>
+                    <strong>In Transit</strong>
+                    <p>Food is on its way to the NGO.</p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="timeline-step"
+                id="step-delivered"
+            >
+
+                <div class="timeline-icon">
+                    5
+                </div>
+
+                <div>
+                    <strong>Delivered</strong>
+                    <p>Donation successfully delivered.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RECENT ACTIVITY -->
+
+    <section class="dashboard-card">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Recent Activity</h2>
+
+                <p>
+                    Your latest donation activity.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div
+            class="activity"
+            id="activityList"
+        >
+
+            <div>
+                <strong>D001</strong>
+                <span>Donation successfully delivered</span>
+            </div>
+
+            <div>
+                <strong>D002</strong>
+                <span>NGO accepted donation</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SECURITY -->
+
+    <section class="dashboard-card">
+
+        <h2>🔐 Security & Verification</h2>
+
+        <div class="security-grid">
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Verified Donation</strong>
+                    <p>
+                        Donation details are validated before matching.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Location Protected</strong>
+                    <p>
+                        Location is used only for donation matching.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="security-card">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Trusted Matching</strong>
+                    <p>
+                        Donations are matched with suitable NGOs.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
 </main>
 
 
 <script src="/static/script.js"></script>
 
 </body>
-
 </html>

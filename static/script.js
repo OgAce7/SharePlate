@@ -1,615 +1,572 @@
 // ==========================================
-// CONFIGURATION
+// SHAREPLATE FRONTEND SCRIPT
 // ==========================================
-
-const API_BASE_URL = "http://127.0.0.1:8001";
 
 
 // ==========================================
-// DONOR DASHBOARD - GET LOCATION
+// DONOR - LOCATION
 // ==========================================
 
 function getLocation() {
 
-    const status = document.getElementById("locationStatus");
+    const status =
+        document.getElementById("locationStatus");
 
     if (!status) {
         return;
     }
 
     if (!navigator.geolocation) {
+
         status.textContent =
-            "Location services are not supported by your browser.";
+            "Location services are not supported.";
+
         return;
     }
 
     status.textContent =
         "📍 Detecting your location...";
 
+
     navigator.geolocation.getCurrentPosition(
 
         function(position) {
 
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+            const latitude =
+                position.coords.latitude;
 
-            document.getElementById("latitude").value = latitude;
-            document.getElementById("longitude").value = longitude;
+            const longitude =
+                position.coords.longitude;
+
+
+            document.getElementById("latitude").value =
+                latitude;
+
+            document.getElementById("longitude").value =
+                longitude;
+
 
             status.textContent =
                 "✓ Location detected successfully";
 
             status.classList.add("success");
 
+
             console.log("Latitude:", latitude);
             console.log("Longitude:", longitude);
+
         },
+
 
         function(error) {
 
-            if (error.code === error.PERMISSION_DENIED) {
+            if (error.code === 1) {
 
                 status.textContent =
-                    "Location permission denied. Please allow location access.";
+                    "Location permission denied.";
 
             } else {
 
                 status.textContent =
-                    "Unable to detect your location. Please try again.";
+                    "Unable to detect location.";
+
             }
+
         }
+
     );
 }
 
 
+
 // ==========================================
-// DONOR DASHBOARD - FORM SUBMISSION
+// DONOR - FORM SUBMISSION
 // ==========================================
 
 const donationForm =
     document.getElementById("donationForm");
 
+
 if (donationForm) {
 
-    donationForm.addEventListener("submit", async function(event) {
+    donationForm.addEventListener(
+        "submit",
+        function(event) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        const foodType =
-            document.getElementById("food_type").value;
 
-        const quantity =
-            Number(document.getElementById("quantity").value);
+            const foodType =
+                document.getElementById("food_type").value;
 
-        const unit =
-            document.getElementById("unit").value;
 
-        const safeUntil =
-            document.getElementById("safe_until").value;
-
-        const latitude =
-            Number(document.getElementById("latitude").value);
-
-        const longitude =
-            Number(document.getElementById("longitude").value);
-
-        const vegetarian =
-            document.getElementById("vegetarian").checked ? 1 : 0;
-
-        const vegan =
-            document.getElementById("vegan").checked ? 1 : 0;
-
-        // Check location
-
-        if (!latitude || !longitude) {
-
-            alert(
-                "Please detect your location first."
-            );
-
-            return;
-        }
-
-        // Check expiry
-
-        if (!safeUntil) {
-
-            alert(
-                "Please select when the food will be safe until."
-            );
-
-            return;
-        }
-
-        // Calculate hours until expiry
-
-        const expiryTime =
-            new Date(safeUntil);
-
-        const currentTime =
-            new Date();
-
-        const hoursUntilExpiry =
-            (expiryTime - currentTime) / (1000 * 60 * 60);
-
-        if (hoursUntilExpiry <= 0) {
-
-            alert(
-                "The expiry time must be in the future."
-            );
-
-            return;
-        }
-
-        // Show temporary status
-
-        showMatchLoading();
-
-        // Data expected by backend
-
-        const donation = {
-
-            food_type: foodType,
-
-            quantity: quantity,
-
-            latitude: latitude,
-
-            longitude: longitude,
-
-            hours_until_expiry: Number(
-                hoursUntilExpiry.toFixed(2)
-            ),
-
-            unit: unit,
-
-            donor_type: "restaurant",
-
-            vegetarian: vegetarian,
-
-            vegan: vegan,
-
-            strict_bounds: false
-        };
-
-        console.log(
-            "Sending donation to backend:"
-        );
-
-        console.log(donation);
-
-        try {
-
-            // ==========================================
-            // STEP 1: REGISTER DONATION
-            // ==========================================
-
-            const donationResponse =
-                await fetch(
-                    `${API_BASE_URL}/donations`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify(donation)
-                    }
+            const quantity =
+                Number(
+                    document.getElementById("quantity").value
                 );
 
-            const donationData =
-                await donationResponse.json();
 
-            if (!donationResponse.ok) {
+            const unit =
+                document.getElementById("unit").value;
 
-                throw new Error(
-                    donationData.detail ||
-                    "Failed to register donation."
+
+            const safeUntil =
+                document.getElementById("safe_until").value;
+
+
+            const latitude =
+                document.getElementById("latitude").value;
+
+
+            const longitude =
+                document.getElementById("longitude").value;
+
+
+            // Check location
+
+            if (!latitude || !longitude) {
+
+                alert(
+                    "Please detect your location first."
                 );
+
+                return;
             }
 
-            console.log(
-                "Donation registered:",
-                donationData
-            );
+
+            // Check expiry
+
+            const expiryTime =
+                new Date(safeUntil);
+
+            const currentTime =
+                new Date();
 
 
-            // ==========================================
-            // STEP 2: RUN NGO MATCHING
-            // ==========================================
+            if (
+                !safeUntil ||
+                expiryTime <= currentTime
+            ) {
 
-            const matchResponse =
-                await fetch(
-                    `${API_BASE_URL}/match`,
-                    {
-                        method: "POST"
-                    }
+                alert(
+                    "Please select a future expiry time."
                 );
 
-            const matchData =
-                await matchResponse.json();
-
-            if (!matchResponse.ok) {
-
-                throw new Error(
-                    matchData.detail ||
-                    "Failed to find NGO matches."
-                );
+                return;
             }
 
-            console.log(
-                "Matching result:",
-                matchData
-            );
 
-
-            // ==========================================
-            // STEP 3: FIND THIS DONATION'S MATCH
-            // ==========================================
+            // Generate demo donation ID
 
             const donationId =
-                donationData.donation?.donation_id;
-
-            const match =
-                matchData.matches?.find(
-                    function(item) {
-                        return item.donation_id === donationId;
-                    }
+                "D" +
+                String(
+                    Math.floor(
+                        Math.random() * 900
+                    ) + 100
                 );
 
 
-            if (match) {
+            // Show match
 
-                showMatchResult(match);
+            showMatchResult(
+                foodType,
+                quantity,
+                unit,
+                donationId
+            );
 
-            } else {
 
-                showNoMatchResult();
+            // Show tracking
+
+            showDonorTracking(
+                donationId
+            );
+
+
+            // Add activity
+
+            addActivity(
+                donationId,
+                "Donation created successfully"
+            );
+
+
+            // Increase donation count
+
+            const total =
+                document.getElementById(
+                    "totalDonations"
+                );
+
+
+            if (total) {
+
+                total.textContent =
+                    Number(total.textContent) + 1;
+
             }
 
-        } catch (error) {
 
-            console.error(
-                "Backend error:",
-                error
+            alert(
+                "Donation created successfully!"
             );
 
-            showMatchError(
-                error.message
-            );
         }
-
-    });
-}
-
-
-// ==========================================
-// MATCH RESULT - LOADING
-// ==========================================
-
-function showMatchLoading() {
-
-    const matchResult =
-        document.getElementById("matchResult");
-
-    if (!matchResult) {
-        return;
-    }
-
-    matchResult.style.display = "block";
-
-    document.getElementById("ngoName").textContent =
-        "Finding the best NGO...";
-
-    document.getElementById("matchScore").textContent =
-        "Match Score: Calculating...";
-
-    document.getElementById("distance").textContent =
-        "Distance: Calculating...";
-
-    document.getElementById("reliability").textContent =
-        "Reliability: Calculating...";
-}
-
-
-// ==========================================
-// MATCH RESULT - SUCCESS
-// ==========================================
-
-function showMatchResult(match) {
-
-    const matchResult =
-        document.getElementById("matchResult");
-
-    if (!matchResult) {
-        return;
-    }
-
-    matchResult.style.display = "block";
-
-    document.getElementById("ngoName").textContent =
-        match.ngo_name || "NGO matched";
-
-    document.getElementById("matchScore").textContent =
-        "Match Score: " +
-        (match.match_score ?? "--");
-
-    // Calculate distance from donor and NGO coordinates
-
-    let distanceText = "Distance: --";
-
-    if (
-        match.latitude !== undefined &&
-        match.longitude !== undefined &&
-        match.ngo_latitude !== undefined &&
-        match.ngo_longitude !== undefined
-    ) {
-
-        const distance =
-            calculateDistance(
-                Number(match.latitude),
-                Number(match.longitude),
-                Number(match.ngo_latitude),
-                Number(match.ngo_longitude)
-            );
-
-        distanceText =
-            "Distance: " +
-            distance.toFixed(2) +
-            " km";
-    }
-
-    document.getElementById("distance").textContent =
-        distanceText;
-
-    document.getElementById("reliability").textContent =
-        "Urgency Score: " +
-        (match.urgency_score ?? "--");
-
-    console.log(
-        "Best NGO:",
-        match.ngo_name
     );
 
-    console.log(
-        "Match Score:",
-        match.match_score
-    );
 }
 
 
-// ==========================================
-// MATCH RESULT - NO MATCH
-// ==========================================
-
-function showNoMatchResult() {
-
-    const matchResult =
-        document.getElementById("matchResult");
-
-    if (!matchResult) {
-        return;
-    }
-
-    matchResult.style.display = "block";
-
-    document.getElementById("ngoName").textContent =
-        "No eligible NGO found";
-
-    document.getElementById("matchScore").textContent =
-        "Match Score: --";
-
-    document.getElementById("distance").textContent =
-        "Distance: --";
-
-    document.getElementById("reliability").textContent =
-        "Try again with different donation details.";
-}
-
 
 // ==========================================
-// MATCH RESULT - ERROR
+// DONOR - NGO MATCH
 // ==========================================
 
-function showMatchError(message) {
-
-    const matchResult =
-        document.getElementById("matchResult");
-
-    if (!matchResult) {
-        return;
-    }
-
-    matchResult.style.display = "block";
-
-    document.getElementById("ngoName").textContent =
-        "Something went wrong";
-
-    document.getElementById("matchScore").textContent =
-        "Match Score: --";
-
-    document.getElementById("distance").textContent =
-        "Distance: --";
-
-    document.getElementById("reliability").textContent =
-        message || "Could not connect to backend.";
-}
-
-
-// ==========================================
-// DISTANCE CALCULATION
-// ==========================================
-
-function calculateDistance(
-    lat1,
-    lon1,
-    lat2,
-    lon2
+function showMatchResult(
+    foodType,
+    quantity,
+    unit,
+    donationId
 ) {
 
-    const earthRadius = 6371;
+    const result =
+        document.getElementById("matchResult");
 
-    const latDifference =
-        toRadians(lat2 - lat1);
 
-    const lonDifference =
-        toRadians(lon2 - lon1);
+    if (!result) {
+        return;
+    }
 
-    const a =
-        Math.sin(latDifference / 2) *
-        Math.sin(latDifference / 2) +
 
-        Math.cos(toRadians(lat1)) *
-        Math.cos(toRadians(lat2)) *
-        Math.sin(lonDifference / 2) *
-        Math.sin(lonDifference / 2);
+    result.style.display =
+        "block";
 
-    const c =
-        2 *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1 - a)
+
+    // Demo NGO
+
+    document.getElementById(
+        "ngoName"
+    ).textContent =
+        "Hope Foundation";
+
+
+    document.getElementById(
+        "matchScore"
+    ).textContent =
+        "Match Score: 94%";
+
+
+    document.getElementById(
+        "distance"
+    ).textContent =
+        "Distance: 1.2 km";
+
+
+    document.getElementById(
+        "reliability"
+    ).textContent =
+        "Reliability: 96%";
+
+
+    console.log(
+        "Donation:",
+        donationId
+    );
+
+    console.log(
+        "Food:",
+        foodType
+    );
+
+    console.log(
+        "Quantity:",
+        quantity,
+        unit
+    );
+}
+
+
+
+// ==========================================
+// DONOR - TRACKING
+// ==========================================
+
+function showDonorTracking(
+    donationId
+) {
+
+    const section =
+        document.getElementById(
+            "trackingSection"
         );
 
-    return earthRadius * c;
+
+    if (!section) {
+        return;
+    }
+
+
+    section.style.display =
+        "block";
+
+
+    section.dataset.donationId =
+        donationId;
+
+
+    // Reset timeline
+
+    resetDonorTracking();
+
+
+    // Demo progression
+
+    setTimeout(
+        function() {
+
+            updateDonorTracking(
+                "accepted"
+            );
+
+        },
+        1500
+    );
+
+
+    setTimeout(
+        function() {
+
+            updateDonorTracking(
+                "picked"
+            );
+
+        },
+        4000
+    );
+
+
+    setTimeout(
+        function() {
+
+            updateDonorTracking(
+                "transit"
+            );
+
+        },
+        7000
+    );
+
+
+    setTimeout(
+        function() {
+
+            updateDonorTracking(
+                "delivered"
+            );
+
+        },
+        10000
+    );
 }
 
 
-function toRadians(degrees) {
 
-    return degrees *
-        (Math.PI / 180);
+// ==========================================
+// DONOR - RESET TRACKING
+// ==========================================
+
+function resetDonorTracking() {
+
+    const steps = [
+        "pending",
+        "accepted",
+        "picked",
+        "transit",
+        "delivered"
+    ];
+
+
+    steps.forEach(
+        function(step) {
+
+            const element =
+                document.getElementById(
+                    "step-" + step
+                );
+
+
+            if (element) {
+
+                element.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "step-pending"
+    ).classList.add(
+        "active"
+    );
+
+
+    document.getElementById(
+        "trackingStatus"
+    ).textContent =
+        "Pending";
 }
 
 
+
 // ==========================================
-// NGO DASHBOARD - REFRESH DONATIONS
+// DONOR - UPDATE TRACKING
 // ==========================================
 
-async function refreshDonations(button) {
+function updateDonorTracking(
+    status
+) {
+
+    const order = [
+        "pending",
+        "accepted",
+        "picked",
+        "transit",
+        "delivered"
+    ];
+
+
+    const index =
+        order.indexOf(status);
+
+
+    if (index === -1) {
+        return;
+    }
+
+
+    for (
+        let i = 0;
+        i <= index;
+        i++
+    ) {
+
+        const step =
+            document.getElementById(
+                "step-" + order[i]
+            );
+
+
+        if (step) {
+
+            step.classList.add(
+                "active"
+            );
+
+        }
+
+    }
+
+
+    const statusText = {
+
+        pending: "Pending",
+
+        accepted: "Accepted",
+
+        picked: "Picked Up",
+
+        transit: "In Transit",
+
+        delivered: "Delivered"
+
+    };
+
+
+    document.getElementById(
+        "trackingStatus"
+    ).textContent =
+        statusText[status];
+
+
+    if (status === "delivered") {
+
+        addActivity(
+            document
+                .getElementById(
+                    "trackingSection"
+                )
+                .dataset.donationId,
+
+            "Donation successfully delivered"
+        );
+
+    }
+
+}
+
+
+
+// ==========================================
+// NGO - REFRESH
+// ==========================================
+
+function refreshDonations() {
+
+    const button =
+        document.getElementById(
+            "refreshButton"
+        );
+
 
     if (!button) {
         return;
     }
 
+
+    button.disabled =
+        true;
+
+
     button.textContent =
         "⏳ Refreshing...";
 
-    button.disabled = true;
 
-    try {
-
-        const response =
-            await fetch(
-                `${API_BASE_URL}/donations/priority`
-            );
-
-        const donations =
-            await response.json();
-
-        if (!response.ok) {
-
-            throw new Error(
-                donations.detail ||
-                "Failed to load donations."
-            );
-        }
-
-        console.log(
-            "Available donations:",
-            donations
-        );
-
-        renderDonations(donations);
-
-        button.textContent =
-            "✓ Refreshed";
-
-    } catch (error) {
-
-        console.error(
-            "Failed to load donations:",
-            error
-        );
-
-        button.textContent =
-            "❌ Failed";
-
-    } finally {
-
-        button.disabled = false;
-
-        setTimeout(function() {
+    setTimeout(
+        function() {
 
             button.textContent =
-                "🔄 Refresh";
+                "✓ Refreshed";
 
-        }, 1500);
-    }
+
+            button.disabled =
+                false;
+
+
+            setTimeout(
+                function() {
+
+                    button.textContent =
+                        "🔄 Refresh";
+
+                },
+                1200
+            );
+
+        },
+        700
+    );
+
 }
 
 
-// ==========================================
-// NGO DASHBOARD - RENDER DONATIONS
-// ==========================================
-
-function renderDonations(donations) {
-
-    const donationList =
-        document.getElementById("donationList");
-
-    if (!donationList) {
-        return;
-    }
-
-    donationList.innerHTML = "";
-
-    if (!donations || donations.length === 0) {
-
-        donationList.innerHTML =
-            "<p>No donations currently available.</p>";
-
-        updateAvailableCount(0);
-
-        return;
-    }
-
-    donations.forEach(function(donation) {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "donation-card";
-
-        card.innerHTML = `
-            <div>
-                <strong>${donation.donation_id}</strong>
-                <h3>${formatFoodType(donation.food_type)}</h3>
-                <p>${donation.quantity} ${donation.unit || ""}</p>
-                <p>⏰ ${donation.hours_until_expiry ?? "--"} hours remaining</p>
-                <p>📍 ${donation.latitude}, ${donation.longitude}</p>
-            </div>
-
-            <button
-                onclick="claimDonation('${donation.donation_id}', this)"
-            >
-                Claim Donation
-            </button>
-        `;
-
-        donationList.appendChild(card);
-    });
-
-    updateAvailableCount(donations.length);
-}
-
 
 // ==========================================
-// NGO DASHBOARD - CLAIM DONATION
+// NGO - CLAIM DONATION
 // ==========================================
 
 function claimDonation(
@@ -617,12 +574,16 @@ function claimDonation(
     button
 ) {
 
-    const donationCard =
-        button.closest(".donation-card");
+    const card =
+        button.closest(
+            ".donation-card"
+        );
 
-    if (!donationCard) {
+
+    if (!card) {
         return;
     }
+
 
     const confirmed =
         confirm(
@@ -631,96 +592,265 @@ function claimDonation(
             "?"
         );
 
+
     if (!confirmed) {
         return;
     }
 
-    // Currently there is NO /claim endpoint
-    // in the backend API provided by your teammate.
-    // So for now we update the frontend only.
 
     button.textContent =
         "✓ Claimed";
 
-    button.disabled = true;
 
-    donationCard.classList.remove(
+    button.disabled =
+        true;
+
+
+    card.classList.remove(
         "urgent"
     );
 
+
     const badge =
-        donationCard.querySelector(".badge");
+        card.querySelector(
+            ".badge"
+        );
+
 
     if (badge) {
+
         badge.textContent =
             "CLAIMED";
+
+        badge.className =
+            "badge low";
+
     }
 
-    const countElement =
+
+    // Update count
+
+    const count =
         document.getElementById(
             "availableCount"
         );
 
-    if (countElement) {
 
-        let count =
-            parseInt(
-                countElement.textContent
+    if (count) {
+
+        const current =
+            Number(
+                count.textContent
             );
 
-        if (count > 0) {
 
-            countElement.textContent =
-                count - 1;
+        if (current > 0) {
+
+            count.textContent =
+                current - 1;
+
         }
+
     }
+
+
+    // Show tracking
+
+    showNGOTracking(
+        donationId
+    );
+
+
+    // Activity
 
     addActivity(
         donationId,
         "Donation successfully claimed"
     );
+
 }
 
 
+
 // ==========================================
-// NGO DASHBOARD - UPDATE COUNT
+// NGO - SHOW TRACKING
 // ==========================================
 
-function updateAvailableCount(count) {
+function showNGOTracking(
+    donationId
+) {
 
-    const countElement =
+    const section =
         document.getElementById(
-            "availableCount"
+            "ngoTrackingSection"
         );
 
-    if (countElement) {
 
-        countElement.textContent =
-            count;
+    if (!section) {
+        return;
     }
+
+
+    section.style.display =
+        "block";
+
+
+    document.getElementById(
+        "trackingDonationId"
+    ).textContent =
+        donationId;
+
+
+    document.getElementById(
+        "ngoTrackingStatus"
+    ).textContent =
+        "Accepted";
+
+
+    resetNGOTracking();
+
 }
 
 
+
 // ==========================================
-// NGO DASHBOARD - FOOD TYPE
+// NGO - RESET TRACKING
 // ==========================================
 
-function formatFoodType(foodType) {
+function resetNGOTracking() {
 
-    if (!foodType) {
-        return "Food Donation";
-    }
+    const steps = [
+        "pending",
+        "accepted",
+        "picked",
+        "transit",
+        "delivered"
+    ];
 
-    return foodType
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, function(letter) {
-            return letter.toUpperCase();
-        });
+
+    steps.forEach(
+        function(step) {
+
+            const element =
+                document.getElementById(
+                    "ngo-step-" + step
+                );
+
+
+            if (element) {
+
+                element.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "ngo-step-pending"
+    ).classList.add(
+        "active"
+    );
+
+
+    document.getElementById(
+        "ngo-step-accepted"
+    ).classList.add(
+        "active"
+    );
+
 }
 
 
+
 // ==========================================
-// NGO DASHBOARD - ACTIVITY
+// NGO - UPDATE TRACKING
+// ==========================================
+
+function updateNGOTracking(
+    status
+) {
+
+    const order = [
+        "pending",
+        "accepted",
+        "picked",
+        "transit",
+        "delivered"
+    ];
+
+
+    const index =
+        order.indexOf(status);
+
+
+    if (index === -1) {
+        return;
+    }
+
+
+    for (
+        let i = 0;
+        i <= index;
+        i++
+    ) {
+
+        const step =
+            document.getElementById(
+                "ngo-step-" +
+                order[i]
+            );
+
+
+        if (step) {
+
+            step.classList.add(
+                "active"
+            );
+
+        }
+
+    }
+
+
+    const statusText = {
+
+        picked: "Picked Up",
+
+        transit: "In Transit",
+
+        delivered: "Delivered"
+
+    };
+
+
+    document.getElementById(
+        "ngoTrackingStatus"
+    ).textContent =
+        statusText[status];
+
+
+    if (status === "delivered") {
+
+        addActivity(
+            document.getElementById(
+                "trackingDonationId"
+            ).textContent,
+
+            "Donation successfully delivered"
+        );
+
+    }
+
+}
+
+
+
+// ==========================================
+// ACTIVITY
 // ==========================================
 
 function addActivity(
@@ -733,20 +863,27 @@ function addActivity(
             "activityList"
         );
 
+
     if (!activityList) {
         return;
     }
 
+
     const activity =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     activity.innerHTML =
         `
-        <div>
-            <strong>${donationId}</strong>
-            <span>${message}</span>
-        </div>
+        <strong>${donationId}</strong>
+        <span>${message}</span>
         `;
 
-    activityList.prepend(activity);
+
+    activityList.prepend(
+        activity
+    );
+
 }
