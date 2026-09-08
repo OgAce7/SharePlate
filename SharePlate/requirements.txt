@@ -1,0 +1,20 @@
+fastapi>=0.95.0
+uvicorn>=0.20.0
+pandas>=1.5.0
+numpy>=1.20.0
+pydantic>=1.10.0
+scikit-learn>=1.0.0
+python-multipart>=0.0.6
+
+# backend/src/shareplate_client.py calls the demand service over HTTP --
+# without this, importing backend.main crashes immediately on startup.
+requests>=2.31.0
+
+# demand_api.py / train_model.py (the demand/food-intelligence service)
+joblib>=1.3.0
+xgboost>=2.0.0
+
+# backend/src/route_optimizer.py's real (OR-Tools) solver -- without this
+# it silently falls back to a single-truck naive route, so routes are far
+# from optimal. Not required to run, but strongly recommended.
+ortools>=9.9

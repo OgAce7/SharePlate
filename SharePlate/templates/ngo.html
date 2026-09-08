@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SharePlate - NGO Food Recovery Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span>SharePlate Platform</span>
+    </div>
+    <nav>
+        <a href="/donor">Donor Dashboard</a>
+        <a href="/ngo" class="active">NGO Dashboard</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <!-- Hero -->
+    <section class="hero">
+        <div>
+            <h1>NGO Food Recovery Dashboard</h1>
+            <p>Review real-time surplus donations prioritized by urgency and claim food assistance for beneficiaries.</p>
+        </div>
+        <div class="status">
+            <span class="status-dot"></span>
+            <span>NGO Demand Engine Online</span>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>Available Donations</span>
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+            </div>
+            <h2 id="availableCount">12</h2>
+            <p>Matches in pickup radius</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>Food Received</span>
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.55 3.89 3.54 4.24V22h2.92v-8.76C11.45 12.89 13 11.12 13 9V2h-2v7z"/></svg>
+                </div>
+            </div>
+            <h2>2,840</h2>
+            <p>Meals this month</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>Beneficiaries</span>
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+            </div>
+            <h2>1,950</h2>
+            <p>People nourished</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>Reliability Score</span>
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </div>
+            </div>
+            <h2>0.95</h2>
+            <p>Top Rated NGO Partner</p>
+        </div>
+    </section>
+
+    <!-- Available Donations -->
+    <section class="dashboard-card">
+        <div class="section-header">
+            <div>
+                <h2>Available Priority Donations</h2>
+                <p>Live listings ranked by perishability, time to expiry, and location proximity.</p>
+            </div>
+
+            <button type="button" class="primary-btn" onclick="refreshDonations(this)">Refresh Listings</button>
+        </div>
+
+        <!-- NGO Filter Toolbar -->
+        <div class="filter-toolbar">
+            <div class="filter-group">
+                <label for="filterFoodType">Food Type</label>
+                <select id="filterFoodType" onchange="applyNgoFilters()">
+                    <option value="all">All Food Types</option>
+                    <option value="cooked_meal">Cooked Meals</option>
+                    <option value="packaged_food">Packaged Food</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="bakery">Bakery Items</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterExpiry">Expiry Status</label>
+                <select id="filterExpiry" onchange="applyNgoFilters()">
+                    <option value="all">All Statuses</option>
+                    <option value="safe">Fresh & Safe (>6h)</option>
+                    <option value="warning">Warning Expiry (3-6h)</option>
+                    <option value="critical">Critical Expiry (&lt;3h)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterSort">Sort Order</label>
+                <select id="filterSort" onchange="applyNgoFilters()">
+                    <option value="urgency_desc">Most Urgent First (Expiry)</option>
+                    <option value="urgency_asc">Least Urgent First</option>
+                    <option value="qty_desc">Highest Quantity First</option>
+                </select>
+            </div>
+            <div class="filter-group search-group">
+                <label for="filterSearch">Search</label>
+                <input type="text" id="filterSearch" placeholder="Search donation ID or food..." oninput="applyNgoFilters()">
+            </div>
+        </div>
+
+        <div class="donation-list" id="donationList">
+            <p style="padding: 20px; text-align: center; color: #666;">Loading live surplus donations...</p>
+        </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="dashboard-card">
+        <div class="section-header">
+            <div>
+                <h2>Recent NGO Activity Log</h2>
+                <p>Latest claimed and completed food rescue operations.</p>
+            </div>
+        </div>
+
+        <div class="activity" id="activityList">
+            <div><strong>D001</strong> <span>Donation claimed by Hope Relief NGO</span></div>
+            <div><strong>D003</strong> <span>Cooked meals picked up by volunteer</span></div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        try {
+            localStorage.setItem('activeTab', 'ngo');
+        } catch (e) {}
+    });
+</script>
+<script src="/static/script.js"></script>
+
+</body>
+</html>
